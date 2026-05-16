@@ -4,7 +4,7 @@ using UnityEngine.Events;
 
 public class HitCollider : MonoBehaviour
 {
-    [SerializeField] private HitData hitData;
+    [SerializeField] public HitData hitData;
     private void OnTriggerEnter2D(Collider2D collision)
     {
         HurtCollider hurtCollider = collision.GetComponent<HurtCollider>();

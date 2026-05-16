@@ -3,28 +3,23 @@ using UnityEngine;
 public class PuncherAIControll : MonoBehaviour
 {
     [SerializeField] private Transform target;
-    [SerializeField] private CharacterController characterController;
-    [SerializeField] private AttackController attackController;
+    [SerializeField] private CharacterMovementController2D characterMovementController;
+    [SerializeField] private CharacterAttackController attackController;
     [SerializeField] private LifeManager lifeManager;
 
     [Header("Attack")]
     [SerializeField] private float attackDistance = 1.5f;
     [SerializeField] private float attackCooldown = 1f;
 
-    [Header("Punch Hitboxes")]
-    [SerializeField] private GameObject rightPunchHitBox;
-    [SerializeField] private GameObject leftPunchHitBox;
-    [SerializeField] private float punchHitBoxTime = 0.1f;
-
     private float nextAttackTime;
 
     private void Awake()
     {
-        if (characterController == null)
-            characterController = GetComponent<CharacterController>();
+        if (characterMovementController == null)
+            characterMovementController = GetComponent<CharacterMovementController2D>();
 
         if (attackController == null)
-            attackController = GetComponent<AttackController>();
+            attackController = GetComponent<CharacterAttackController>();
 
         if (lifeManager == null)
             lifeManager = GetComponent<LifeManager>();
@@ -55,14 +50,15 @@ public class PuncherAIControll : MonoBehaviour
     private void Update()
     {
         Vector2 rawMove = Vector2.zero;
+        
 
-        if (characterController != null)
+        if (characterMovementController != null)
         {
             if (target != null)
             {
                 float distanceToTarget = Mathf.Abs(target.position.x - transform.position.x);
 
-                if (distanceToTarget <= attackDistance)
+                if (distanceToTarget <= attackDistance && Time.time >= nextAttackTime)
                 {
                     rawMove = Vector2.zero;
                     TryPunch();
@@ -80,8 +76,7 @@ public class PuncherAIControll : MonoBehaviour
                     }
                 }
             }
-
-            characterController.SetRawMove(rawMove);
+            characterMovementController.SetRawMove(rawMove);
         }
     }
 
@@ -92,23 +87,7 @@ public class PuncherAIControll : MonoBehaviour
 
         nextAttackTime = Time.time + attackCooldown;
 
-        attackController.PlayAttack("Punch");
+        attackController.TryDefaultAttack();
     }
 
-    // Animation Event
-    public void OnPunchHit()
-    {
-        GameObject hitBoxToEnable;
-
-        if (characterController.IsFacingLeft)
-        {
-            hitBoxToEnable = leftPunchHitBox;
-        }
-        else
-        {
-            hitBoxToEnable = rightPunchHitBox;
-        }
-
-        attackController.EnableHitBox(hitBoxToEnable, punchHitBoxTime);
-    }
 }

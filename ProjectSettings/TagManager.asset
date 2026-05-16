@@ -38,14 +38,44 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Default
-    uniqueID: 0
+  - name: Back10
+    uniqueID: 4040973807
+    locked: 0
+  - name: Back9
+    uniqueID: 3319356695
+    locked: 0
+  - name: Back8
+    uniqueID: 3090555987
+    locked: 0
+  - name: Back7
+    uniqueID: 2116213331
+    locked: 0
+  - name: Back6
+    uniqueID: 1692140029
+    locked: 0
+  - name: Back5
+    uniqueID: 132714673
+    locked: 0
+  - name: Back4
+    uniqueID: 1268019733
+    locked: 0
+  - name: Back3
+    uniqueID: 1546853787
+    locked: 0
+  - name: BackGroundSkyBox
+    uniqueID: 1013317559
     locked: 0
   - name: Background
     uniqueID: 2286984599
     locked: 0
+  - name: Default
+    uniqueID: 0
+    locked: 0
   - name: Gameplay
     uniqueID: 3280990537
+    locked: 0
+  - name: UI
+    uniqueID: 2438183509
     locked: 0
   m_RenderingLayers:
   - Default

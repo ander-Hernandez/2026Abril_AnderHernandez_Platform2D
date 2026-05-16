@@ -4,8 +4,11 @@ using UnityEngine.InputSystem;
 public class PlayerControl : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private CharacterController characterController;
-    [SerializeField] private AttackController attackController;
+    [SerializeField] private CharacterMovementController2D characterMovement;
+    [SerializeField] private DashMovementController dashController;
+    [SerializeField] private CharacterAttackController attackController;
+    [SerializeField] private AirKickAttack airKickAttack;
+    [SerializeField] private AreaAirGroundAttack airGroundAttack;
     [SerializeField] private LifeManager lifeManager;
 
     [Header("Input")]
@@ -13,39 +16,27 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] private InputActionReference jump;
     [SerializeField] private InputActionReference punch;
 
-    [Header("Player Hitboxes")]
-    [SerializeField] private GameObject rightPunchHitBox;
-    [SerializeField] private GameObject leftPunchHitBox;
-    [SerializeField] private float punchHitBoxTime = 0.1f;
-    [SerializeField] private GameObject movingAttackHitBox;
-    [SerializeField] private float movingAttackHitBoxTime;
-
-    private bool canMove;
- 
+    public bool canMove = true;
 
     private Vector2 rawMove;
-    
-    
+    private bool hasDashed;
 
     private void Awake()
     {
-        if (characterController == null)
-            characterController = GetComponent<CharacterController>();
+        if (characterMovement == null)
+            characterMovement = GetComponent<CharacterMovementController2D>();
+
+        if (dashController == null)
+            dashController = GetComponent<DashMovementController>();
 
         if (attackController == null)
-            attackController = GetComponent<AttackController>();
+            attackController = GetComponent<CharacterAttackController>();
 
         if (lifeManager == null)
             lifeManager = GetComponent<LifeManager>();
 
-        move.action.performed += OnMove;
-        move.action.started += OnMove;
-        move.action.canceled += OnMove;
-
-        jump.action.performed += OnJump;
-        punch.action.performed += OnPunch;
         canMove = true;
-        
+        hasDashed = false;
     }
 
     private void OnEnable()
@@ -54,24 +45,44 @@ public class PlayerControl : MonoBehaviour
         jump.action.Enable();
         punch.action.Enable();
 
-        lifeManager.OnLifeDepleted.AddListener(Die);
+        move.action.performed += OnMove;
+        move.action.started += OnMove;
+        move.action.canceled += OnMove;
+
+        jump.action.performed += OnJump;
+        punch.action.performed += OnPunch;
+
+        if (lifeManager != null)
+            lifeManager.OnLifeDepleted.AddListener(Die);
     }
 
     private void OnDisable()
     {
+        move.action.performed -= OnMove;
+        move.action.started -= OnMove;
+        move.action.canceled -= OnMove;
+
+        jump.action.performed -= OnJump;
+        punch.action.performed -= OnPunch;
+
         move.action.Disable();
         jump.action.Disable();
         punch.action.Disable();
 
-        lifeManager.OnLifeDepleted.RemoveListener(Die);
+        if (lifeManager != null)
+            lifeManager.OnLifeDepleted.RemoveListener(Die);
     }
 
     private void Update()
     {
-        characterController.SetRawMove(rawMove);
-        if (characterController.IsGrounded())
+        if (characterMovement == null)
+            return;
+
+        characterMovement.SetRawMove(rawMove);
+
+        if (characterMovement.IsGrounded())
         {
-            canMove = true;
+            hasDashed = false;
         }
     }
 
@@ -82,35 +93,60 @@ public class PlayerControl : MonoBehaviour
 
     private void OnJump(InputAction.CallbackContext context)
     {
-        characterController.Jump();
+        if (characterMovement == null)
+            return;
+
+        bool jumped = characterMovement.TryJump();
+
+        if (jumped)
+        {
+            hasDashed = false;
+            return;
+        }
+
+        TryAirDash(false, true);
     }
 
     private void OnPunch(InputAction.CallbackContext context)
     {
-        attackController.PlayAttack("Punch");
-    }
+        if (attackController == null || characterMovement == null)
+            return;
 
-    // Animation Event
-    public void OnPunchHit()
-    {
-        GameObject hitBoxToEnable;
-
-        if (characterController.IsFacingLeft)
+        if (characterMovement.IsGrounded())
         {
-            hitBoxToEnable = leftPunchHitBox;
-        }
-        else
-        {
-            hitBoxToEnable = rightPunchHitBox;
+            hasDashed = false;
+            attackController.TryDefaultAttack();
+            return;
         }
 
-        attackController.EnableHitBox(hitBoxToEnable, punchHitBoxTime);
+        if (!hasDashed)
+        {
+            bool dashStarted = TryAirDash(true, false);
 
+            if (dashStarted)
+            {
+                attackController.TryAttack(airKickAttack);
+            }
+
+            return;
+        }
+
+        attackController.TryAttack(airGroundAttack);
     }
 
-    public void OnMovingAttackHit()
+    private bool TryAirDash(bool onlyHorizontal, bool countsAsDash)
     {
-        attackController.EnableHitBox(movingAttackHitBox, movingAttackHitBoxTime);
+        if (dashController == null)
+            return false;
+
+        bool dashStarted = dashController.TryDash(rawMove, onlyHorizontal);
+
+        if (dashStarted)
+        {
+            hasDashed = countsAsDash;
+        }
+
+        return dashStarted;
     }
 
     private void Die(float arg0)
