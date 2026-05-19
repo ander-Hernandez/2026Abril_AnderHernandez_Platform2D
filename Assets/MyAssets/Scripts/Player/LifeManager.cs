@@ -11,15 +11,31 @@ public class LifeManager : MonoBehaviour
     public UnityEvent<float, float> OnLifeChanged;
     public UnityEvent<float> OnLifeDepleted;
 
+    [Header("Animation")]
+    [SerializeField] private string hitTrigger = "Hit";
+    [SerializeField] private Animator animator;
+
+    [Header("Physics")]
+    [SerializeField] private Rigidbody2D rb2D;
+
     [Header("Debug")]
     [SerializeField] private bool debugTakeDamage;
 
     private bool isDead;
+    [SerializeField] private CharacterMovementController2D characterMovement;
 
     private void Awake()
     {
         currentLife = startLife;
         OnLifeChanged?.Invoke(currentLife, startLife);
+
+        if (characterMovement == null)
+            characterMovement = GetComponent<CharacterMovementController2D>();
+        if (animator == null)
+            animator = GetComponentInChildren<Animator>();
+
+        if (rb2D == null)
+            rb2D = GetComponent<Rigidbody2D>();
     }
 
     private void Update()
@@ -27,13 +43,18 @@ public class LifeManager : MonoBehaviour
         if (debugTakeDamage)
         {
             debugTakeDamage = false;
-            TakeDamage(1f);
+
+            HitData hitData = new HitData();
+            hitData.damage = 1;
+
+            TakeHit(hitData);
         }
     }
 
     public void TakeHit(HitData hitData)
     {
         TakeDamage(hitData.damage);
+        ApplyKnockback(hitData);
     }
 
     public void TakeDamage(float damage)
@@ -41,7 +62,8 @@ public class LifeManager : MonoBehaviour
         if (isDead)
             return;
 
-        Debug.Log("LifeManager: TakingDamage");
+        if (animator != null)
+            animator.SetTrigger(hitTrigger);
 
         currentLife -= damage;
         currentLife = Mathf.Clamp(currentLife, 0f, startLife);
@@ -52,6 +74,18 @@ public class LifeManager : MonoBehaviour
         {
             Die();
         }
+    }
+
+    private void ApplyKnockback(HitData hitData)
+    {
+        if (characterMovement == null)
+            return;
+
+        characterMovement.ApplyKnockback(
+            hitData.knockback,
+            hitData.attacker,
+            hitData.knockbackTime
+        );
     }
 
     private void Die()

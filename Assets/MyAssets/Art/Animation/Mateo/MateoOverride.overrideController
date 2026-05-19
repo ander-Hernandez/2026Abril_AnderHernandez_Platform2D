@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MateoOverride
+  m_Controller: {fileID: 9100000, guid: 0b21681d7c9938346959609e548d4dec, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 131fae44d73467948a626f725d390aad, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 0be8e26ea53837a4595d830ac99476aa, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 1d5488eafca7f634bb9f4e97a1c656bf, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 177d787b884e5ef4c9fe05f270b6165b, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 696bb9097b6393d4096d8c77d09bd1f0, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: a2c0a4bf8de48084d9b2c1bfa64db7e4, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 9f2f4f451ea75bf45abd40d2993a5b38, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 177d787b884e5ef4c9fe05f270b6165b, type: 2}

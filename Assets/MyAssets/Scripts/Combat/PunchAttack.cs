@@ -12,12 +12,15 @@ public class PunchAttack : AttackBase
     [SerializeField] private GameObject leftPunchHitBox;
     [SerializeField] private GameObject rightRunningPunchHitBox;
     [SerializeField] private GameObject leftRunningPunchHitBox;
+    [SerializeField] private GameObject UpperPunchHitBox;
     [SerializeField] private float hitBoxTime = 0.1f;
 
     [Header("Animation")]
     [SerializeField] private string punchTrigger = "Punch";
+    [SerializeField] private string lookingUpBool = "LookingUp";
 
     private bool isAttacking;
+    private bool isLookingUp;
 
     private void Awake()
     {
@@ -39,11 +42,15 @@ public class PunchAttack : AttackBase
 
         if (animator != null)
             animator.SetTrigger(punchTrigger);
+        isLookingUp = characterMovement.IsLookingUp;
+        if (animator != null)
+            animator.SetBool(lookingUpBool, isLookingUp);
     }
 
     // Animation Event
     public void OnPunchHit()
     {
+        
         GameObject hitBoxToEnable = GetCorrectHitBox();
 
         if (hitBoxToEnable == null)
@@ -61,6 +68,9 @@ public class PunchAttack : AttackBase
     {
         if (characterMovement == null)
             return null;
+        if(isLookingUp && !characterMovement.IsMoving)
+            return UpperPunchHitBox;
+            
 
         if (characterMovement.IsFacingLeft)
         {

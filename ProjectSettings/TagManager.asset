@@ -16,13 +16,13 @@ TagManager:
   - 
   - 
   - Enemy
-  - 
-  - 
+  - EnemyTrigger
+  - EnemyPhysics
   - 
   - 
   - Player
-  - 
-  - 
+  - PlayerTrigger
+  - PlayerPhysics
   - 
   - 
   - 

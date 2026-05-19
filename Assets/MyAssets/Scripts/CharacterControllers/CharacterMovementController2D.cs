@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class CharacterMovementController2D : MonoBehaviour
@@ -7,6 +8,10 @@ public class CharacterMovementController2D : MonoBehaviour
     [SerializeField] private float jumpForce;
     [SerializeField] private float moveThreshold = 0.1f;
     [SerializeField] private float fallGravityMultiplier = 1.8f;
+    
+    [Header("Sprite Direction")]
+    [SerializeField] private bool spriteFacesRightByDefault = true;
+
 
     [Header("Ground Check")]
     [SerializeField] private float groundCheckDistance;
@@ -21,14 +26,25 @@ public class CharacterMovementController2D : MonoBehaviour
 
     private Rigidbody2D rb2D;
     private Vector2 rawMove;
+    public bool IsLookingUp;
 
     private bool movementLocked;
 
     private float lastGroundedTime;
     private bool hasConsumedCoyoteJump;
+    private Coroutine knockbackCoroutine;
 
-    public bool IsFacingLeft => sprite != null && sprite.flipX;
-    public bool IsFacingRight => !IsFacingLeft;
+    public bool IsFacingRight
+    {
+        get
+        {
+            if (sprite == null)
+                return true;
+
+            return spriteFacesRightByDefault ? !sprite.flipX : sprite.flipX;
+        }
+    }
+    public bool IsFacingLeft => !IsFacingRight;
 
     public bool IsMoving => Mathf.Abs(rawMove.x) > moveThreshold;
 
@@ -41,6 +57,7 @@ public class CharacterMovementController2D : MonoBehaviour
 
         if (sprite == null)
             sprite = GetComponentInChildren<SpriteRenderer>();
+        IsLookingUp = false;
     }
 
     private void Start()
@@ -131,6 +148,7 @@ public class CharacterMovementController2D : MonoBehaviour
 
     private void UpdateMovement()
     {
+        Debug.Log(movementLocked);
         if (movementLocked)
             return;
 
@@ -148,9 +166,9 @@ public class CharacterMovementController2D : MonoBehaviour
             return;
 
         if (rawMove.x > 0)
-            sprite.flipX = false;
+            sprite.flipX = !spriteFacesRightByDefault;
         else if (rawMove.x < 0)
-            sprite.flipX = true;
+            sprite.flipX = spriteFacesRightByDefault;
     }
 
     private void UpdateAnimationParameters()
@@ -165,5 +183,40 @@ public class CharacterMovementController2D : MonoBehaviour
     public void SetMovementLocked(bool locked)
     {
         movementLocked = locked;
+    }
+
+    public void ApplyKnockback(Vector2 knockback, GameObject attacker, float duration)
+    {
+        if (attacker == null)
+            return;
+
+        if (knockbackCoroutine != null)
+            StopCoroutine(knockbackCoroutine);
+
+        knockbackCoroutine = StartCoroutine(KnockbackCoroutine(knockback, attacker, duration));
+    }
+
+    private IEnumerator KnockbackCoroutine(Vector2 knockback, GameObject attacker, float duration)
+    {
+        movementLocked = true;
+
+        float direction = Mathf.Sign(transform.position.x - attacker.transform.position.x);
+
+        Vector2 finalKnockback = new Vector2(
+            knockback.x * direction,
+            knockback.y
+        );
+
+        rb2D.linearVelocity = finalKnockback;
+
+        yield return new WaitForSecondsRealtime(duration);
+        
+        movementLocked = false;
+        knockbackCoroutine = null;
+    }
+
+    public void SetLookingUp(bool lookingUp)
+    {
+        IsLookingUp = lookingUp;
     }
 }

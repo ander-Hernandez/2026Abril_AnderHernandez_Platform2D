@@ -10,6 +10,7 @@ public class PuncherAIControll : MonoBehaviour
     [Header("Attack")]
     [SerializeField] private float attackDistance = 1.5f;
     [SerializeField] private float attackCooldown = 1f;
+    [SerializeField] private float distanceToStop = 0.05f;
 
     private float nextAttackTime;
 
@@ -62,9 +63,14 @@ public class PuncherAIControll : MonoBehaviour
                 {
                     rawMove = Vector2.zero;
                     TryPunch();
+                } else if(distanceToTarget <= distanceToStop)
+                {
+                    rawMove = Vector2.zero;
                 }
                 else
                 {
+
+
                     if (target.position.x > transform.position.x)
                     {
                         rawMove = Vector2.right;
@@ -74,6 +80,9 @@ public class PuncherAIControll : MonoBehaviour
                     {
                         rawMove = Vector2.left;
                     }
+
+
+
                 }
             }
             characterMovementController.SetRawMove(rawMove);

@@ -23,6 +23,11 @@ public class HitCollider : MonoBehaviour
             data.attacker = attacker;
 
             hurtCollider.NotifyHit(data);
+
+            if (HitPauseManager.Instance != null)
+            {
+                HitPauseManager.Instance.TriggerHitPause(data.hitPauseTime);
+            }
         }
     }
 }
