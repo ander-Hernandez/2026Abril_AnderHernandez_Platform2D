@@ -1,0 +1,845 @@
+fileFormatVersion: 2
+guid: e031b92ac0e1ca4429e142fc93544fc0
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -3736009491700432313
+    second: GoldenEnemy_0
+  - first:
+      213: 8197612861307921985
+    second: GoldenEnemy_1
+  - first:
+      213: -1124894311602183461
+    second: GoldenEnemy_2
+  - first:
+      213: 1758816922342330155
+    second: GoldenEnemy_3
+  - first:
+      213: -3433974447512405276
+    second: GoldenEnemy_4
+  - first:
+      213: 8467170042143978925
+    second: GoldenEnemy_5
+  - first:
+      213: 2931161733110792959
+    second: GoldenEnemy_6
+  - first:
+      213: 1671039476521902888
+    second: GoldenEnemy_7
+  - first:
+      213: -7434088841506903213
+    second: GoldenEnemy_8
+  - first:
+      213: -8433237515687475590
+    second: GoldenEnemy_9
+  - first:
+      213: 8445746341932424184
+    second: GoldenEnemy_10
+  - first:
+      213: -755407469671077923
+    second: GoldenEnemy_11
+  - first:
+      213: -3588734039475042105
+    second: GoldenEnemy_12
+  - first:
+      213: 781240591823545985
+    second: GoldenEnemy_13
+  - first:
+      213: 3709307829006932289
+    second: GoldenEnemy_14
+  - first:
+      213: 2912557329723861050
+    second: GoldenEnemy_15
+  - first:
+      213: 7489749428202341534
+    second: GoldenEnemy_16
+  - first:
+      213: 257111966325503810
+    second: GoldenEnemy_17
+  - first:
+      213: 6380404189460589150
+    second: GoldenEnemy_18
+  - first:
+      213: 3180033435824247578
+    second: GoldenEnemy_19
+  - first:
+      213: 7630489446563795624
+    second: GoldenEnemy_20
+  - first:
+      213: 6475266186293063623
+    second: GoldenEnemy_21
+  - first:
+      213: -1862103746888636372
+    second: GoldenEnemy_22
+  - first:
+      213: -4276308924943827903
+    second: GoldenEnemy_23
+  - first:
+      213: -7229090916208339151
+    second: GoldenEnemy_24
+  - first:
+      213: -2927454684062258231
+    second: GoldenEnemy_25
+  - first:
+      213: 6453412201053502109
+    second: GoldenEnemy_26
+  - first:
+      213: -3301074542556916241
+    second: GoldenEnemy_27
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: GoldenEnemy_0
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 151
+        width: 24
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74245b95927072cc0800000000000000
+      internalID: -3736009491700432313
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoldenEnemy_1
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 151
+        width: 30
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 146ae6ce675c3c170800000000000000
+      internalID: 8197612861307921985
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoldenEnemy_2
+      rect:
+        serializedVersion: 2
+        x: 99
+        y: 151
+        width: 31
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bd2281365929360f0800000000000000
+      internalID: -1124894311602183461
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoldenEnemy_3
+      rect:
+        serializedVersion: 2
+        x: 99
+        y: 100
+        width: 26
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b2f09291ca2986810800000000000000
+      internalID: 1758816922342330155
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoldenEnemy_4
+      rect:
+        serializedVersion: 2
+        x: 145
+        y: 151
+        width: 35
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ea31481f621850d0800000000000000
+      internalID: -3433974447512405276
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoldenEnemy_5
+      rect:
+        serializedVersion: 2
+        x: 146
+        y: 100
+        width: 33
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da532d6da4e618570800000000000000
+      internalID: 8467170042143978925
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoldenEnemy_6
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 151
+        width: 31
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff28949f0149da820800000000000000
+      internalID: 2931161733110792959
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoldenEnemy_7
+      rect:
+        serializedVersion: 2
+        x: 193
+        y: 100
+        width: 28
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8232eb3ec89b03710800000000000000
+      internalID: 1671039476521902888
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoldenEnemy_8
+      rect:
+        serializedVersion: 2
+        x: 238
+        y: 151
+        width: 31
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 35b294d069fc4d890800000000000000
+      internalID: -7434088841506903213
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoldenEnemy_9
+      rect:
+        serializedVersion: 2
+        x: 239
+        y: 100
+        width: 25
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a7643f2292f17fa80800000000000000
+      internalID: -8433237515687475590
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoldenEnemy_10
+      rect:
+        serializedVersion: 2
+        x: 286
+        y: 150
+        width: 24
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8fbdfedec81553570800000000000000
+      internalID: 8445746341932424184
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoldenEnemy_11
+      rect:
+        serializedVersion: 2
+        x: 333
+        y: 151
+        width: 23
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dd7249d98e04485f0800000000000000
+      internalID: -755407469671077923
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoldenEnemy_12
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 100
+        width: 32
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7c8ccbfa761423ec0800000000000000
+      internalID: -3588734039475042105
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoldenEnemy_13
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 101
+        width: 31
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 18622c7dd2687da00800000000000000
+      internalID: 781240591823545985
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoldenEnemy_14
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 57
+        width: 41
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 149988651db1a7330800000000000000
+      internalID: 3709307829006932289
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoldenEnemy_15
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 51
+        width: 41
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a38a622c57b7b6820800000000000000
+      internalID: 2912557329723861050
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoldenEnemy_16
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 51
+        width: 30
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e948fac2c6fe0f760800000000000000
+      internalID: 7489749428202341534
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoldenEnemy_17
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 51
+        width: 39
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 247755c98f1719300800000000000000
+      internalID: 257111966325503810
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoldenEnemy_18
+      rect:
+        serializedVersion: 2
+        x: 189
+        y: 51
+        width: 34
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e5a66343ecfbb8850800000000000000
+      internalID: 6380404189460589150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoldenEnemy_19
+      rect:
+        serializedVersion: 2
+        x: 235
+        y: 51
+        width: 30
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a135b24bf8fb12c20800000000000000
+      internalID: 3180033435824247578
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoldenEnemy_20
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 1
+        width: 36
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8a25dcc39b1f4e960800000000000000
+      internalID: 7630489446563795624
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoldenEnemy_21
+      rect:
+        serializedVersion: 2
+        x: 47
+        y: 1
+        width: 38
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7cfa81cf944ccd950800000000000000
+      internalID: 6475266186293063623
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoldenEnemy_22
+      rect:
+        serializedVersion: 2
+        x: 99
+        y: 1
+        width: 34
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2867cf028a7826e0800000000000000
+      internalID: -1862103746888636372
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoldenEnemy_23
+      rect:
+        serializedVersion: 2
+        x: 149
+        y: 1
+        width: 25
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 14cf3ea80bf77a4c0800000000000000
+      internalID: -4276308924943827903
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoldenEnemy_24
+      rect:
+        serializedVersion: 2
+        x: 188
+        y: 1
+        width: 35
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1371662fc1c1dab90800000000000000
+      internalID: -7229090916208339151
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoldenEnemy_25
+      rect:
+        serializedVersion: 2
+        x: 231
+        y: 1
+        width: 39
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9cb6a64a9779f57d0800000000000000
+      internalID: -2927454684062258231
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoldenEnemy_26
+      rect:
+        serializedVersion: 2
+        x: 284
+        y: 1
+        width: 29
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d9a37f884302f8950800000000000000
+      internalID: 6453412201053502109
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoldenEnemy_27
+      rect:
+        serializedVersion: 2
+        x: 332
+        y: 1
+        width: 26
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fe55fc1813a3032d0800000000000000
+      internalID: -3301074542556916241
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      GoldenEnemy_0: -3736009491700432313
+      GoldenEnemy_1: 8197612861307921985
+      GoldenEnemy_10: 8445746341932424184
+      GoldenEnemy_11: -755407469671077923
+      GoldenEnemy_12: -3588734039475042105
+      GoldenEnemy_13: 781240591823545985
+      GoldenEnemy_14: 3709307829006932289
+      GoldenEnemy_15: 2912557329723861050
+      GoldenEnemy_16: 7489749428202341534
+      GoldenEnemy_17: 257111966325503810
+      GoldenEnemy_18: 6380404189460589150
+      GoldenEnemy_19: 3180033435824247578
+      GoldenEnemy_2: -1124894311602183461
+      GoldenEnemy_20: 7630489446563795624
+      GoldenEnemy_21: 6475266186293063623
+      GoldenEnemy_22: -1862103746888636372
+      GoldenEnemy_23: -4276308924943827903
+      GoldenEnemy_24: -7229090916208339151
+      GoldenEnemy_25: -2927454684062258231
+      GoldenEnemy_26: 6453412201053502109
+      GoldenEnemy_27: -3301074542556916241
+      GoldenEnemy_3: 1758816922342330155
+      GoldenEnemy_4: -3433974447512405276
+      GoldenEnemy_5: 8467170042143978925
+      GoldenEnemy_6: 2931161733110792959
+      GoldenEnemy_7: 1671039476521902888
+      GoldenEnemy_8: -7434088841506903213
+      GoldenEnemy_9: -8433237515687475590
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

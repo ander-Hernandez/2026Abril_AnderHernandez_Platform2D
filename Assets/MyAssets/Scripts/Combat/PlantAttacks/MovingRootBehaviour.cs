@@ -5,12 +5,15 @@ public class MovingRootBehaviour : MonoBehaviour
     [SerializeField] public bool isInitialazed;
     [SerializeField] public Vector2 moveVector;
     [SerializeField] public float speed;
-    private Rigidbody2D rb;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] private Rigidbody2D rb;
+
+    private void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
-        InitializeAttack(Vector2.right);
+        if(rb == null)
+        {
+            rb = GetComponent<Rigidbody2D>();
+        }
+        
     }
 
     // Update is called once per frame
@@ -25,9 +28,17 @@ public class MovingRootBehaviour : MonoBehaviour
 
     public void InitializeAttack(Vector2 vector)
     {
-        if(rb != null)
+        Debug.Log("RootAttack1: "+ (rb != null));
+
+        if (rb != null)
         {
+            Debug.Log("RootAttack2");
+
+            if (vector.x < 0)
+                GetComponent<SpriteRenderer>().flipX = true;
             rb.linearVelocity = vector.normalized * speed;
         }
     }
+
+    
 }

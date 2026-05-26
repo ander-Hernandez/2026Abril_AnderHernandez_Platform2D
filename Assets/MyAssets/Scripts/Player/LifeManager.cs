@@ -24,6 +24,11 @@ public class LifeManager : MonoBehaviour
     private bool isDead;
     [SerializeField] private CharacterMovementController2D characterMovement;
 
+    [Header("Invunerability Settings")]
+    [SerializeField] private float invulnerabilityTime;
+    private float nextDamageableTime;
+    private bool isDamageable;
+
     private void Awake()
     {
         currentLife = startLife;
@@ -36,10 +41,19 @@ public class LifeManager : MonoBehaviour
 
         if (rb2D == null)
             rb2D = GetComponent<Rigidbody2D>();
+        isDamageable = true;
     }
 
     private void Update()
     {
+        if (!isDamageable)
+        {
+            if(Time.time >= nextDamageableTime)
+                {
+                    isDamageable= true;
+                }
+            
+        }
         if (debugTakeDamage)
         {
             debugTakeDamage = false;
@@ -49,10 +63,16 @@ public class LifeManager : MonoBehaviour
 
             TakeHit(hitData);
         }
+
     }
 
     public void TakeHit(HitData hitData)
     {
+        if (!isDamageable)
+            return;
+        isDamageable = false;
+        nextDamageableTime = Time.time + invulnerabilityTime;
+
         TakeDamage(hitData.damage);
         ApplyKnockback(hitData);
     }
@@ -95,5 +115,29 @@ public class LifeManager : MonoBehaviour
 
         isDead = true;
         OnLifeDepleted?.Invoke(startLife);
+    }
+
+
+    public void ResetLifeManager()
+    {
+        isDead = false;
+        currentLife = startLife;
+        OnLifeChanged?.Invoke(currentLife, startLife);
+    }
+
+    public void ActivateDeadTrigger()
+    {
+        animator.SetTrigger("Die");
+    }
+
+    public void DieOnCustomTime(float time)
+    {
+        ActivateDeadTrigger();
+        Destroy(gameObject, time);
+    }
+
+    public void Kill()
+    {
+        Die();
     }
 }

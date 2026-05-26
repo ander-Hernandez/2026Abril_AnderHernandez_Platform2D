@@ -12,7 +12,7 @@ public class PunchAttack : AttackBase
     [SerializeField] private GameObject leftPunchHitBox;
     [SerializeField] private GameObject rightRunningPunchHitBox;
     [SerializeField] private GameObject leftRunningPunchHitBox;
-    [SerializeField] private GameObject UpperPunchHitBox;
+    [SerializeField] private GameObject upperPunchHitBox;
     [SerializeField] private float hitBoxTime = 0.1f;
 
     [Header("Animation")]
@@ -28,7 +28,7 @@ public class PunchAttack : AttackBase
             characterMovement = GetComponent<CharacterMovementController2D>();
 
         if (animator == null)
-            animator = GetComponent<Animator>();
+            animator = GetComponentInChildren<Animator>();
 
         DisableAllHitBoxes();
     }
@@ -38,19 +38,24 @@ public class PunchAttack : AttackBase
         if (isAttacking)
             return;
 
+        if (characterMovement == null)
+            return;
+
         isAttacking = true;
+
+        
+        isLookingUp = characterMovement.IsLookingUp;
+
+        if (animator != null)
+            animator.SetBool(lookingUpBool, isLookingUp);
 
         if (animator != null)
             animator.SetTrigger(punchTrigger);
-        isLookingUp = characterMovement.IsLookingUp;
-        if (animator != null)
-            animator.SetBool(lookingUpBool, isLookingUp);
     }
 
     // Animation Event
     public void OnPunchHit()
     {
-        
         GameObject hitBoxToEnable = GetCorrectHitBox();
 
         if (hitBoxToEnable == null)
@@ -68,9 +73,10 @@ public class PunchAttack : AttackBase
     {
         if (characterMovement == null)
             return null;
-        if(isLookingUp && !characterMovement.IsMoving)
-            return UpperPunchHitBox;
-            
+
+        
+        if (isLookingUp && !characterMovement.IsMoving)
+            return upperPunchHitBox;
 
         if (characterMovement.IsFacingLeft)
         {
@@ -88,11 +94,11 @@ public class PunchAttack : AttackBase
     {
         hitBox.SetActive(true);
 
+
         yield return new WaitForSeconds(time);
 
         hitBox.SetActive(false);
         OnPunchFinished();
-        
     }
 
     private void DisableAllHitBoxes()
@@ -108,5 +114,13 @@ public class PunchAttack : AttackBase
 
         if (leftRunningPunchHitBox != null)
             leftRunningPunchHitBox.SetActive(false);
+
+        if (upperPunchHitBox != null)
+            upperPunchHitBox.SetActive(false);
+    }
+
+    public override void ClearAttack()
+    {
+        DisableAllHitBoxes();
     }
 }

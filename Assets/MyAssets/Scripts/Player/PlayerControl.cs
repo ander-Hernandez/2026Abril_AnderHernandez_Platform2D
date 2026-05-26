@@ -5,76 +5,86 @@ public class PlayerControl : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private CharacterMovementController2D characterMovement;
-    [SerializeField] private DashMovementController dashController;
+    [SerializeField] private DashMovementController dashMovement;
     [SerializeField] private CharacterAttackController attackController;
-    [SerializeField] private AirKickAttack airKickAttack;
-    [SerializeField] private AreaAirGroundAttack airGroundAttack;
-    [SerializeField] private LifeManager lifeManager;
+
+    [Header("Attacks")]
+    [SerializeField] private AttackBase punchAttack;
+    [SerializeField] private AttackBase airKickAttack;
+    [SerializeField] private AttackBase airGroundAttack;
 
     [Header("Input")]
     [SerializeField] private InputActionReference move;
     [SerializeField] private InputActionReference jump;
     [SerializeField] private InputActionReference punch;
-    [SerializeField] private InputActionReference heavyPunch;
 
-    public bool canMove = true;
+    [Header("Input Thresholds")]
+    [SerializeField] private float horizontalThreshold = 0.5f;
+    [SerializeField] private float verticalThreshold = 0.5f;
 
-    private Vector2 rawMove;
-    private bool hasDashed;
+
+
+    [SerializeField] Transform respawnPoint;
+
+    private Vector2 moveInput;
+    private bool hasAirDashed;
 
     private void Awake()
     {
         if (characterMovement == null)
             characterMovement = GetComponent<CharacterMovementController2D>();
 
-        if (dashController == null)
-            dashController = GetComponent<DashMovementController>();
+        if (dashMovement == null)
+            dashMovement = GetComponent<DashMovementController>();
 
         if (attackController == null)
             attackController = GetComponent<CharacterAttackController>();
-
-        if (lifeManager == null)
-            lifeManager = GetComponent<LifeManager>();
-
-        canMove = true;
-        hasDashed = false;
     }
 
     private void OnEnable()
     {
-        move.action.Enable();
-        jump.action.Enable();
-        punch.action.Enable();
-        heavyPunch.action.Enable();
+        if (move != null)
+        {
+            move.action.Enable();
+            move.action.performed += OnMove;
+            move.action.canceled += OnMove;
+        }
 
-        move.action.performed += OnMove;
-        move.action.started += OnMove;
-        move.action.canceled += OnMove;
+        if (jump != null)
+        {
+            jump.action.Enable();
+            jump.action.performed += OnJump;
+            jump.action.canceled += OnJumpCanceled;
+        }
 
-        jump.action.performed += OnJump;
-        punch.action.performed += OnPunch;
-        heavyPunch.action.performed += OnHeavyPunch;
-
-        if (lifeManager != null)
-            lifeManager.OnLifeDepleted.AddListener(Die);
+        if (punch != null)
+        {
+            punch.action.Enable();
+            punch.action.performed += OnPunch;
+        }
     }
 
     private void OnDisable()
     {
-        move.action.performed -= OnMove;
-        move.action.started -= OnMove;
-        move.action.canceled -= OnMove;
+        if (move != null)
+        {
+            move.action.performed -= OnMove;
+            move.action.canceled -= OnMove;
+            move.action.Disable();
+        }
 
-        jump.action.performed -= OnJump;
-        punch.action.performed -= OnPunch;
-        heavyPunch.action.performed -= OnHeavyPunch;
-        move.action.Disable();
-        jump.action.Disable();
-        punch.action.Disable();
-        heavyPunch.action.Disable();
+        if (jump != null)
+        {
+            jump.action.performed -= OnJump;
+            jump.action.canceled -= OnJumpCanceled;
+            jump.action.Disable();
+        }
 
-        if (lifeManager != null)
-            lifeManager.OnLifeDepleted.RemoveListener(Die);
+        if (punch != null)
+        {
+            punch.action.performed -= OnPunch;
+            punch.action.Disable();
+        }
     }
 
     private void Update()
@@ -82,26 +92,27 @@ public class PlayerControl : MonoBehaviour
         if (characterMovement == null)
             return;
 
-        characterMovement.SetRawMove(rawMove);
-
         if (characterMovement.IsGrounded())
-        {
-            hasDashed = false;
-        }
+            hasAirDashed = false;
     }
 
     private void OnMove(InputAction.CallbackContext context)
     {
-        rawMove = context.ReadValue<Vector2>();
-        Debug.Log("OnMove: " + rawMove);
-        if (rawMove.y > 0)
+        moveInput = context.ReadValue<Vector2>();
+
+        if (characterMovement != null)
         {
-            characterMovement.IsLookingUp = true;
+            Vector2 movementInput = new Vector2(GetHorizontalMovementInput(), 0f);
+            characterMovement.SetRawMove(movementInput);
         }
-        else
-        {
-            characterMovement.IsLookingUp = false;
-        }
+    }
+
+    private float GetHorizontalMovementInput()
+    {
+        if (Mathf.Abs(moveInput.x) < horizontalThreshold)
+            return 0f;
+
+        return Mathf.Sign(moveInput.x);
     }
 
     private void OnJump(InputAction.CallbackContext context)
@@ -113,70 +124,140 @@ public class PlayerControl : MonoBehaviour
 
         if (jumped)
         {
-            hasDashed = false;
+            hasAirDashed = false;
             return;
         }
 
-        TryAirDash(false, true);
+        TryAirDash(moveInput, false);
+    }
+    private void OnJumpCanceled(InputAction.CallbackContext context)
+    {
+        if (characterMovement == null)
+            return;
+
+        characterMovement.CutJump();
     }
 
     private void OnPunch(InputAction.CallbackContext context)
     {
-        if (attackController == null || characterMovement == null)
-            return;
-
-        if (characterMovement.IsGrounded())
-        {
-            hasDashed = false;
-            attackController.TryDefaultAttack();
-            return;
-        }
-
-        bool dashStarted = TryAirDash(true, false);
-
-        if (dashStarted)
-        {
-            attackController.TryAttack(airKickAttack);
-            return;
-        }
-
-
-        
-       
-
-    }
-    private void OnHeavyPunch(InputAction.CallbackContext context)
-    {
-        if (attackController == null || characterMovement == null)
-            return;
-
-        if (characterMovement.IsGrounded())
-        {
-            hasDashed = false;
-            TryAirDash(true, false);
-            attackController.TryDefaultAttack();
-            return;
-        }
-        attackController.TryAttack(airGroundAttack);
+        TryAttackFromInput();
     }
 
-    private bool TryAirDash(bool onlyHorizontal, bool countsAsDash)
+    private void TryAttackFromInput()
     {
-        if (dashController == null)
+        if (characterMovement == null)
+            return;
+
+        if (attackController == null)
+            return;
+
+        bool isGrounded = characterMovement.IsGrounded();
+
+        bool wantsUp = moveInput.y > verticalThreshold;
+        bool wantsDown = moveInput.y < -verticalThreshold;
+        bool wantsSide = Mathf.Abs(moveInput.x) > horizontalThreshold;
+
+        if (isGrounded)
+        {
+            TryGroundAttack(wantsUp, wantsDown);
+            return;
+        }
+
+        TryAirAttack(wantsUp, wantsDown, wantsSide);
+    }
+
+    private void TryGroundAttack(bool wantsUp, bool wantsDown)
+    {
+        bool wantsUpperAttack = wantsUp || wantsDown;
+
+        characterMovement.SetLookingUp(wantsUpperAttack);
+        attackController.TryAttack(punchAttack);
+    }
+
+    private void TryAirAttack(bool wantsUp, bool wantsDown, bool wantsSide)
+    {
+        if (wantsDown)
+        {
+            characterMovement.SetLookingUp(false);
+            attackController.TryAttack(airGroundAttack);
+            return;
+        }
+
+        if (!hasAirDashed)
+        {
+            TryFirstAirAttack(wantsUp, wantsSide);
+            return;
+        }
+
+        TryNormalAirAttack(wantsUp);
+    }
+
+    private void TryFirstAirAttack(bool wantsUp, bool wantsSide)
+    {
+        if (wantsSide)
+        {
+            float dashDirectionX = Mathf.Sign(moveInput.x);
+            Vector2 dashDirection = new Vector2(dashDirectionX, 0f);
+
+            bool dashStarted = TryAirDash(dashDirection, true);
+
+            if (dashStarted)
+            {
+                characterMovement.SetLookingUp(false);
+                attackController.TryAttack(airKickAttack);
+            }
+
+            return;
+        }
+
+        if (wantsUp)
+        {
+            Vector2 dashDirection = Vector2.up;
+
+            bool dashStarted = TryAirDash(dashDirection, false);
+
+            if (dashStarted)
+            {
+                characterMovement.SetLookingUp(true);
+                attackController.TryAttack(punchAttack);
+            }
+
+            return;
+        }
+
+        characterMovement.SetLookingUp(false);
+        attackController.TryAttack(punchAttack);
+    }
+
+    private void TryNormalAirAttack(bool wantsUp)
+    {
+        characterMovement.SetLookingUp(wantsUp);
+        attackController.TryAttack(punchAttack);
+    }
+
+    private bool TryAirDash(Vector2 dashInput, bool onlyHorizontal)
+    {
+        if (dashMovement == null)
             return false;
 
-        bool dashStarted = dashController.TryDash(rawMove, onlyHorizontal);
+        if (characterMovement == null)
+            return false;
+
+        if (characterMovement.IsGrounded())
+            return false;
+
+        bool dashStarted = dashMovement.TryDash(dashInput, onlyHorizontal);
 
         if (dashStarted)
-        {
-            hasDashed = countsAsDash;
-        }
+            hasAirDashed = true;
 
         return dashStarted;
     }
 
-    private void Die(float arg0)
+
+    public void Respawn()
     {
-        gameObject.SetActive(false);
+        transform.position = respawnPoint.position;
+        
     }
 }

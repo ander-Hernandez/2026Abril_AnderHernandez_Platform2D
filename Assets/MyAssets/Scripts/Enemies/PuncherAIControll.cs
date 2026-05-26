@@ -13,9 +13,10 @@ public class PuncherAIControll : MonoBehaviour
     [SerializeField] private float distanceToStop = 0.05f;
 
     private float nextAttackTime;
-
+    private bool isDead;
     private void Awake()
     {
+        isDead = false;
         if (characterMovementController == null)
             characterMovementController = GetComponent<CharacterMovementController2D>();
 
@@ -45,14 +46,16 @@ public class PuncherAIControll : MonoBehaviour
 
     private void OnLifeDepleted(float arg0)
     {
-        gameObject.SetActive(false);
+        characterMovementController.SetMovementLocked(true);
     }
 
     private void Update()
     {
+        if (isDead)
+            return;
         Vector2 rawMove = Vector2.zero;
         
-
+        
         if (characterMovementController != null)
         {
             if (target != null)
@@ -99,4 +102,15 @@ public class PuncherAIControll : MonoBehaviour
         attackController.TryDefaultAttack();
     }
 
+    public void SetTarget(Transform targetTransform)
+    {
+        target = targetTransform;
+    }
+
+
+    public void Die()
+    {
+        isDead = true;
+        characterMovementController.StopMovement();
+    }
 }

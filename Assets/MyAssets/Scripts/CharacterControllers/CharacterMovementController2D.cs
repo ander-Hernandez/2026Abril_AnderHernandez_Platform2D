@@ -19,6 +19,7 @@ public class CharacterMovementController2D : MonoBehaviour
 
     [Header("Jump")]
     [SerializeField] private float coyoteTime = 0.12f;
+    [SerializeField] private float jumpCutMultiplier = 0.5f;
 
     [Header("References")]
     [SerializeField] private SpriteRenderer sprite;
@@ -68,13 +69,17 @@ public class CharacterMovementController2D : MonoBehaviour
 
     private void Update()
     {
+
+        
         UpdateGroundedState();
 
         UpdateMovement();
         UpdateSpriteDirection();
         UpdateAnimationParameters();
         FixFreeFall();
+        Debug.Log("["+ gameObject.name+"]: " + animator.GetBool("IsRunning"));
     }
+
 
     private void UpdateGroundedState()
     {
@@ -123,7 +128,16 @@ public class CharacterMovementController2D : MonoBehaviour
 
         return true;
     }
+    public void CutJump()
+    {
+        if (movementLocked)
+            return;
 
+        if (rb2D.linearVelocityY <= 0f)
+            return;
+
+        rb2D.linearVelocityY *= jumpCutMultiplier;
+    }
     private bool CanJump()
     {
         if (IsGrounded())
@@ -148,7 +162,7 @@ public class CharacterMovementController2D : MonoBehaviour
 
     private void UpdateMovement()
     {
-        Debug.Log(movementLocked);
+        
         if (movementLocked)
             return;
 
@@ -219,4 +233,7 @@ public class CharacterMovementController2D : MonoBehaviour
     {
         IsLookingUp = lookingUp;
     }
+
+
+    
 }

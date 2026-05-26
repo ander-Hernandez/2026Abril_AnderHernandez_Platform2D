@@ -1,9 +1,7 @@
-using System.Collections;
 using UnityEngine;
 
 public class AirKickAttack : AttackBase
 {
-    
     [Header("References")]
     [SerializeField] private CharacterMovementController2D characterMovement;
     [SerializeField] private Animator animator;
@@ -13,7 +11,7 @@ public class AirKickAttack : AttackBase
     [SerializeField] private GameObject rightKickColliderObject;
 
     [Header("Animation")]
-    [SerializeField] private string attackTrigger = "Punch";
+    [SerializeField] private string attackTrigger = "AirKick";
 
     private bool isAttacking;
 
@@ -23,20 +21,24 @@ public class AirKickAttack : AttackBase
             characterMovement = GetComponent<CharacterMovementController2D>();
 
         if (animator == null)
-            animator = GetComponent<Animator>();
+            animator = GetComponentInChildren<Animator>();
 
-        
+        DisableHitBoxes();
     }
+
     private void Update()
     {
-        if (isAttacking)
-        {
-            if (characterMovement.IsGrounded())
-            {
-                OnKickFinished();
-            }
-        }
+        if (!isAttacking)
+            return;
+
+        if (characterMovement == null)
+            return;
+
+        // Si toca el suelo mientras hace airkick, se corta.
+        if (characterMovement.IsGrounded())
+            OnKickFinished();
     }
+
     public override void TryExecute()
     {
         if (isAttacking)
@@ -48,27 +50,29 @@ public class AirKickAttack : AttackBase
             animator.SetTrigger(attackTrigger);
     }
 
-    
+    // Animation Event
     public void OnKickStart()
     {
         GameObject hitBoxToEnable = GetCorrectHitBox();
-        hitBoxToEnable.SetActive(true);
-        characterMovement.SetMovementLocked(true);
+
         if (hitBoxToEnable == null)
             return;
 
-        
+        hitBoxToEnable.SetActive(true);
+
+        if (characterMovement != null)
+            characterMovement.SetMovementLocked(true);
     }
 
+    // Animation Event, o llamada desde Update al tocar suelo
     public void OnKickFinished()
     {
         isAttacking = false;
-        if(leftKickColliderObject != null)
-            leftKickColliderObject.SetActive(false);
-        if(rightKickColliderObject != null)
-            rightKickColliderObject.SetActive(false);
-        characterMovement.SetMovementLocked(false);
 
+        DisableHitBoxes();
+
+        if (characterMovement != null)
+            characterMovement.SetMovementLocked(false);
     }
 
     private GameObject GetCorrectHitBox()
@@ -77,18 +81,22 @@ public class AirKickAttack : AttackBase
             return null;
 
         if (characterMovement.IsFacingLeft)
-        {
             return leftKickColliderObject;
-        }
-        else
-        {
-            return rightKickColliderObject;
-        }
 
-        
+        return rightKickColliderObject;
     }
 
-    
+    private void DisableHitBoxes()
+    {
+        if (leftKickColliderObject != null)
+            leftKickColliderObject.SetActive(false);
 
-  
+        if (rightKickColliderObject != null)
+            rightKickColliderObject.SetActive(false);
+    }
+
+    public override void ClearAttack()
+    {
+        DisableHitBoxes();
+    }
 }
