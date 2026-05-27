@@ -4,11 +4,12 @@ public class PlantAttack : AttackBase
 {
     [Header("References")]
     [SerializeField] private CharacterMovementController2D characterMovement;
+    [SerializeField] private EnemyAttackController enemyAttackController;
     [SerializeField] private Animator animator;
 
     [Header("Root")]
     [SerializeField] private GameObject rootPrefab;
-    [SerializeField] private float rootTime;
+    [SerializeField] private float rootTime = 2f;
 
     [Header("Animation")]
     [SerializeField] private string attackTrigger = "Punch";
@@ -16,10 +17,18 @@ public class PlantAttack : AttackBase
     private bool isAttacking;
     private bool hasSpawnedRoot;
 
+    public override bool IsExecuting
+    {
+        get { return isAttacking; }
+    }
+
     private void Awake()
     {
         if (characterMovement == null)
             characterMovement = GetComponent<CharacterMovementController2D>();
+
+        if (enemyAttackController == null)
+            enemyAttackController = GetComponent<EnemyAttackController>();
 
         if (animator == null)
             animator = GetComponentInChildren<Animator>();
@@ -46,7 +55,7 @@ public class PlantAttack : AttackBase
     }
 
     // Animation Event
-    private void TriggerAttackHit()
+    public void TriggerAttackHit()
     {
         if (!isAttacking)
             return;
@@ -59,26 +68,49 @@ public class PlantAttack : AttackBase
 
         hasSpawnedRoot = true;
 
+        Vector2 attackVector = GetAttackDirection();
+
         GameObject instance = Instantiate(rootPrefab, transform.position, transform.rotation);
-
-        Vector2 attackVector = Vector2.left;
-
-        if (characterMovement != null && characterMovement.IsFacingRight)
-            attackVector = Vector2.right;
 
         MovingRootBehaviour movingRootBehaviour = instance.GetComponent<MovingRootBehaviour>();
 
         if (movingRootBehaviour != null)
             movingRootBehaviour.InitializeAttack(attackVector);
+        OnPlantAttackAnimationEnds();
 
         Destroy(instance, rootTime);
-
-        EndAttack();
     }
 
     public void OnPlantAttackAnimationEnds()
     {
         EndAttack();
+    }
+
+    private Vector2 GetAttackDirection()
+    {
+        Transform target = GetCurrentTarget();
+
+        if (target != null)
+        {
+            if (target.position.x > transform.position.x)
+                return Vector2.right;
+
+            if (target.position.x < transform.position.x)
+                return Vector2.left;
+        }
+
+        if (characterMovement != null && characterMovement.IsFacingRight)
+            return Vector2.right;
+
+        return Vector2.left;
+    }
+
+    private Transform GetCurrentTarget()
+    {
+        if (enemyAttackController == null)
+            return null;
+
+        return enemyAttackController.GetCurrentTarget();
     }
 
     private void EndAttack()

@@ -38,6 +38,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: BackSky
+    uniqueID: 989322757
+    locked: 0
   - name: Back10
     uniqueID: 4040973807
     locked: 0

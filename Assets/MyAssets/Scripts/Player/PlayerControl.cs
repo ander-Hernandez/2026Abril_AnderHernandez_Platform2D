@@ -17,14 +17,14 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] private InputActionReference move;
     [SerializeField] private InputActionReference jump;
     [SerializeField] private InputActionReference punch;
+    [SerializeField] private InputActionReference heavyAttack;
 
     [Header("Input Thresholds")]
     [SerializeField] private float horizontalThreshold = 0.5f;
     [SerializeField] private float verticalThreshold = 0.5f;
 
-
-
-    [SerializeField] Transform respawnPoint;
+    [Header("Respawn")]
+    [SerializeField] private Transform respawnPoint;
 
     private Vector2 moveInput;
     private bool hasAirDashed;
@@ -62,6 +62,12 @@ public class PlayerControl : MonoBehaviour
             punch.action.Enable();
             punch.action.performed += OnPunch;
         }
+
+        if (heavyAttack != null)
+        {
+            heavyAttack.action.Enable();
+            heavyAttack.action.performed += OnHeavyAttack;
+        }
     }
 
     private void OnDisable()
@@ -84,6 +90,12 @@ public class PlayerControl : MonoBehaviour
         {
             punch.action.performed -= OnPunch;
             punch.action.Disable();
+        }
+
+        if (heavyAttack != null)
+        {
+            heavyAttack.action.performed -= OnHeavyAttack;
+            heavyAttack.action.Disable();
         }
     }
 
@@ -130,6 +142,7 @@ public class PlayerControl : MonoBehaviour
 
         TryAirDash(moveInput, false);
     }
+
     private void OnJumpCanceled(InputAction.CallbackContext context)
     {
         if (characterMovement == null)
@@ -140,10 +153,15 @@ public class PlayerControl : MonoBehaviour
 
     private void OnPunch(InputAction.CallbackContext context)
     {
-        TryAttackFromInput();
+        TryLightAttackFromInput();
     }
 
-    private void TryAttackFromInput()
+    private void OnHeavyAttack(InputAction.CallbackContext context)
+    {
+        TryHeavyAttackFromInput();
+    }
+
+    private void TryLightAttackFromInput()
     {
         if (characterMovement == null)
             return;
@@ -153,20 +171,42 @@ public class PlayerControl : MonoBehaviour
 
         bool isGrounded = characterMovement.IsGrounded();
 
-        bool wantsUp = moveInput.y > verticalThreshold;
-        bool wantsDown = moveInput.y < -verticalThreshold;
-        bool wantsSide = Mathf.Abs(moveInput.x) > horizontalThreshold;
+        bool wantsUp = WantsUp();
+        bool wantsDown = WantsDown();
 
         if (isGrounded)
         {
-            TryGroundAttack(wantsUp, wantsDown);
+            TryGroundPunch(wantsUp, wantsDown);
             return;
         }
 
-        TryAirAttack(wantsUp, wantsDown, wantsSide);
+        TryAirLightAttack(wantsUp, wantsDown);
     }
 
-    private void TryGroundAttack(bool wantsUp, bool wantsDown)
+    private void TryHeavyAttackFromInput()
+    {
+        if (characterMovement == null)
+            return;
+
+        if (attackController == null)
+            return;
+
+        bool isGrounded = characterMovement.IsGrounded();
+
+        bool wantsUp = WantsUp();
+        bool wantsDown = WantsDown();
+        bool wantsSide = WantsSide();
+
+        if (isGrounded)
+        {
+            TryGroundPunch(wantsUp, wantsDown);
+            return;
+        }
+
+        TryAirHeavyAttack(wantsUp, wantsDown, wantsSide);
+    }
+
+    private void TryGroundPunch(bool wantsUp, bool wantsDown)
     {
         bool wantsUpperAttack = wantsUp || wantsDown;
 
@@ -174,7 +214,7 @@ public class PlayerControl : MonoBehaviour
         attackController.TryAttack(punchAttack);
     }
 
-    private void TryAirAttack(bool wantsUp, bool wantsDown, bool wantsSide)
+    private void TryAirLightAttack(bool wantsUp, bool wantsDown)
     {
         if (wantsDown)
         {
@@ -183,45 +223,29 @@ public class PlayerControl : MonoBehaviour
             return;
         }
 
-        if (!hasAirDashed)
+        characterMovement.SetLookingUp(wantsUp);
+        attackController.TryAttack(punchAttack);
+    }
+
+    private void TryAirHeavyAttack(bool wantsUp, bool wantsDown, bool wantsSide)
+    {
+        if (wantsDown)
         {
-            TryFirstAirAttack(wantsUp, wantsSide);
+            characterMovement.SetLookingUp(false);
+            attackController.TryAttack(airGroundAttack);
             return;
         }
 
-        TryNormalAirAttack(wantsUp);
-    }
-
-    private void TryFirstAirAttack(bool wantsUp, bool wantsSide)
-    {
         if (wantsSide)
         {
-            float dashDirectionX = Mathf.Sign(moveInput.x);
-            Vector2 dashDirection = new Vector2(dashDirectionX, 0f);
-
-            bool dashStarted = TryAirDash(dashDirection, true);
-
-            if (dashStarted)
-            {
-                characterMovement.SetLookingUp(false);
-                attackController.TryAttack(airKickAttack);
-            }
-
+            TryHeavyAirKick();
             return;
         }
 
         if (wantsUp)
         {
-            Vector2 dashDirection = Vector2.up;
-
-            bool dashStarted = TryAirDash(dashDirection, false);
-
-            if (dashStarted)
-            {
-                characterMovement.SetLookingUp(true);
-                attackController.TryAttack(punchAttack);
-            }
-
+            characterMovement.SetLookingUp(true);
+            attackController.TryAttack(punchAttack);
             return;
         }
 
@@ -229,10 +253,36 @@ public class PlayerControl : MonoBehaviour
         attackController.TryAttack(punchAttack);
     }
 
-    private void TryNormalAirAttack(bool wantsUp)
+    private void TryHeavyAirKick()
     {
-        characterMovement.SetLookingUp(wantsUp);
-        attackController.TryAttack(punchAttack);
+        if (!hasAirDashed)
+        {
+            float dashDirectionX = Mathf.Sign(moveInput.x);
+            Vector2 dashDirection = new Vector2(dashDirectionX, 0f);
+
+            bool dashStarted = TryAirDash(dashDirection, true);
+
+            if (!dashStarted)
+                return;
+        }
+
+        characterMovement.SetLookingUp(false);
+        attackController.TryAttack(airKickAttack);
+    }
+
+    private bool WantsUp()
+    {
+        return moveInput.y > verticalThreshold;
+    }
+
+    private bool WantsDown()
+    {
+        return moveInput.y < -verticalThreshold;
+    }
+
+    private bool WantsSide()
+    {
+        return Mathf.Abs(moveInput.x) > horizontalThreshold;
     }
 
     private bool TryAirDash(Vector2 dashInput, bool onlyHorizontal)
@@ -254,10 +304,18 @@ public class PlayerControl : MonoBehaviour
         return dashStarted;
     }
 
-
     public void Respawn()
     {
+        if (respawnPoint == null)
+            return;
+
         transform.position = respawnPoint.position;
-        
+    }
+    public void SetRespawnPoint(Transform newRespawnPoint)
+    {
+        if (newRespawnPoint == null)
+            return;
+
+        respawnPoint = newRespawnPoint;
     }
 }

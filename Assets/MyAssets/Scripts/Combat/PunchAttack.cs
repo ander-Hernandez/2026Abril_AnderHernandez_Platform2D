@@ -51,6 +51,7 @@ public class PunchAttack : AttackBase
 
         if (animator != null)
             animator.SetTrigger(punchTrigger);
+        
     }
 
     // Animation Event

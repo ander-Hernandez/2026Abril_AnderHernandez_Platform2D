@@ -4,6 +4,7 @@ public class AirKickAttack : AttackBase
 {
     [Header("References")]
     [SerializeField] private CharacterMovementController2D characterMovement;
+    [SerializeField] private LifeManager lifeManager;
     [SerializeField] private Animator animator;
 
     [Header("Hitboxes")]
@@ -15,10 +16,18 @@ public class AirKickAttack : AttackBase
 
     private bool isAttacking;
 
+    public override bool IsExecuting
+    {
+        get { return isAttacking; }
+    }
+
     private void Awake()
     {
         if (characterMovement == null)
             characterMovement = GetComponent<CharacterMovementController2D>();
+
+        if (lifeManager == null)
+            lifeManager = GetComponent<LifeManager>();
 
         if (animator == null)
             animator = GetComponentInChildren<Animator>();
@@ -34,7 +43,6 @@ public class AirKickAttack : AttackBase
         if (characterMovement == null)
             return;
 
-        // Si toca el suelo mientras hace airkick, se corta.
         if (characterMovement.IsGrounded())
             OnKickFinished();
     }
@@ -46,25 +54,24 @@ public class AirKickAttack : AttackBase
 
         isAttacking = true;
 
+        if (lifeManager != null)
+            lifeManager.SetInvulnerable(true);
+
         if (animator != null)
             animator.SetTrigger(attackTrigger);
     }
 
-    // Animation Event
     public void OnKickStart()
     {
         GameObject hitBoxToEnable = GetCorrectHitBox();
 
-        if (hitBoxToEnable == null)
-            return;
-
-        hitBoxToEnable.SetActive(true);
+        if (hitBoxToEnable != null)
+            hitBoxToEnable.SetActive(true);
 
         if (characterMovement != null)
             characterMovement.SetMovementLocked(true);
     }
 
-    // Animation Event, o llamada desde Update al tocar suelo
     public void OnKickFinished()
     {
         isAttacking = false;
@@ -73,6 +80,9 @@ public class AirKickAttack : AttackBase
 
         if (characterMovement != null)
             characterMovement.SetMovementLocked(false);
+
+        if (lifeManager != null)
+            lifeManager.SetInvulnerable(false);
     }
 
     private GameObject GetCorrectHitBox()
@@ -98,5 +108,13 @@ public class AirKickAttack : AttackBase
     public override void ClearAttack()
     {
         DisableHitBoxes();
+
+        isAttacking = false;
+
+        if (characterMovement != null)
+            characterMovement.SetMovementLocked(false);
+
+        if (lifeManager != null)
+            lifeManager.SetInvulnerable(false);
     }
 }

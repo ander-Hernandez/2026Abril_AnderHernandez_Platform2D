@@ -48,6 +48,7 @@ public class DashMovementController : MonoBehaviour
         Vector2 dashVector = movementInput;
         if (onlyHorizontal)
             dashVector = new Vector2(dashVector.x, 0);
+        AudioManager.Instance.PlayDashSound();
         StartCoroutine(DashCoroutine(dashVector, onlyHorizontal));
         return true;
     }

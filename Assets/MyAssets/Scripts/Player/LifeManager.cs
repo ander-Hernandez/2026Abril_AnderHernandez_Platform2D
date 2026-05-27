@@ -25,8 +25,10 @@ public class LifeManager : MonoBehaviour
     [SerializeField] private CharacterMovementController2D characterMovement;
 
     [Header("Invunerability Settings")]
+    private bool isManuallyInvulnerable;
     [SerializeField] private float invulnerabilityTime;
     private float nextDamageableTime;
+
     private bool isDamageable;
 
     private void Awake()
@@ -68,15 +70,22 @@ public class LifeManager : MonoBehaviour
 
     public void TakeHit(HitData hitData)
     {
+        if (isManuallyInvulnerable)
+            return;
+
         if (!isDamageable)
             return;
+
         isDamageable = false;
         nextDamageableTime = Time.time + invulnerabilityTime;
 
         TakeDamage(hitData.damage);
         ApplyKnockback(hitData);
     }
-
+    public void SetInvulnerable(bool invulnerable)
+    {
+        isManuallyInvulnerable = invulnerable;
+    }
     public void TakeDamage(float damage)
     {
         if (isDead)
@@ -139,5 +148,16 @@ public class LifeManager : MonoBehaviour
     public void Kill()
     {
         Die();
+    }
+
+
+
+    public void playHurtSound()
+    {
+        AudioManager.Instance.PlayDamageSound();
+    }
+    public void playDieSound()
+    {
+        AudioManager.Instance.PlayDeathSound();
     }
 }

@@ -28,6 +28,7 @@ public class BananaCoinBehaviour : MonoBehaviour
         if (PointManager.Instance != null)
         {
             PointManager.Instance.AddPoints(pointsToAdd);
+            AudioManager.Instance.PlayCoinSound();
         }
         else
         {

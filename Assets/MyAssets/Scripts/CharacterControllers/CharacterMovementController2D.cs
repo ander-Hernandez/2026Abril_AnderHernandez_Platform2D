@@ -35,6 +35,9 @@ public class CharacterMovementController2D : MonoBehaviour
     private bool hasConsumedCoyoteJump;
     private Coroutine knockbackCoroutine;
 
+    [Header("Facing Lock")]
+    [SerializeField] private float defaultFacingLockTime = 0.25f;
+    private float facingLockedUntilTime;
     public bool IsFacingRight
     {
         get
@@ -77,7 +80,7 @@ public class CharacterMovementController2D : MonoBehaviour
         UpdateSpriteDirection();
         UpdateAnimationParameters();
         FixFreeFall();
-        Debug.Log("["+ gameObject.name+"]: " + animator.GetBool("IsRunning"));
+        
     }
 
 
@@ -174,6 +177,9 @@ public class CharacterMovementController2D : MonoBehaviour
         if (movementLocked)
             return;
 
+        if (Time.time < facingLockedUntilTime)
+            return;
+
         bool isMoving = Mathf.Abs(rawMove.x) > moveThreshold;
 
         if (!isMoving || sprite == null)
@@ -183,6 +189,36 @@ public class CharacterMovementController2D : MonoBehaviour
             sprite.flipX = !spriteFacesRightByDefault;
         else if (rawMove.x < 0)
             sprite.flipX = spriteFacesRightByDefault;
+    }
+    public void FaceTowards(Transform target)
+    {
+        FaceTowards(target, defaultFacingLockTime);
+    }
+
+    public void FaceTowards(Transform target, float lockTime)
+    {
+        if (target == null)
+            return;
+
+        float directionX = target.position.x - transform.position.x;
+
+        FaceDirection(directionX, lockTime);
+    }
+
+    public void FaceDirection(float directionX, float lockTime)
+    {
+        if (sprite == null)
+            return;
+
+        if (Mathf.Abs(directionX) <= 0.01f)
+            return;
+
+        if (directionX > 0f)
+            sprite.flipX = !spriteFacesRightByDefault;
+        else
+            sprite.flipX = spriteFacesRightByDefault;
+
+        facingLockedUntilTime = Time.time + lockTime;
     }
 
     private void UpdateAnimationParameters()

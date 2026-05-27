@@ -26,7 +26,7 @@ public class CharacterAttackController : MonoBehaviour
     {
         if (attack == null)
             return;
-
+        
         currentAttack = attack;
         attack.TryExecute();
     }

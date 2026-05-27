@@ -5,6 +5,7 @@ public class AreaAirGroundAttack : AttackBase
 {
     [Header("References")]
     [SerializeField] private CharacterMovementController2D characterMovement;
+    [SerializeField] private LifeManager lifeManager;
     [SerializeField] private Animator animator;
     [SerializeField] private Rigidbody2D rb;
 
@@ -38,6 +39,9 @@ public class AreaAirGroundAttack : AttackBase
 
         if (characterMovement == null)
             characterMovement = GetComponent<CharacterMovementController2D>();
+
+        if (lifeManager == null)
+            lifeManager = GetComponent<LifeManager>();
 
         if (animator == null)
             animator = GetComponentInChildren<Animator>();
@@ -82,6 +86,9 @@ public class AreaAirGroundAttack : AttackBase
 
         if (characterMovement != null)
             characterMovement.SetMovementLocked(true);
+
+        if (lifeManager != null)
+            lifeManager.SetInvulnerable(true);
 
         StartAttackDash();
     }
@@ -131,6 +138,9 @@ public class AreaAirGroundAttack : AttackBase
         if (characterMovement != null)
             characterMovement.SetMovementLocked(false);
 
+        if (lifeManager != null)
+            lifeManager.SetInvulnerable(false);
+
         isExecuting = false;
         canExecute = true;
         hasImpacted = false;
@@ -143,6 +153,9 @@ public class AreaAirGroundAttack : AttackBase
 
         if (characterMovement != null)
             characterMovement.SetMovementLocked(false);
+
+        if (lifeManager != null)
+            lifeManager.SetInvulnerable(false);
 
         isExecuting = false;
         canExecute = true;
